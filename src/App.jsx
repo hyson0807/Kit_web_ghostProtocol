@@ -7,21 +7,47 @@ function App() {
   const [email, setEmail] = useState(''); // email 상태값 추가
   const [content, setContent] = useState(''); // content 상태값 추가
 
+// 버튼 클릭 핸들러, 버튼 클릭시 선택된 버튼의 인덱스를 상태로 저장
   const handleButtonClick = (buttonIndex) => {
+    if(buttonIndex === selectedButton) {
+      setSelectedButton(null);
+      return;
+    }
     setSelectedButton(buttonIndex);
   };
 
+  //데이터 전송 함수 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post('http://Hyson0807-env.eba-nnuh2vva.ap-northeast-2.elasticbeanstalk.com/submit', { // 8080 포트로 변경
+      const response = await axios.post('http://Hyson0807-env.eba-nnuh2vva.ap-northeast-2.elasticbeanstalk.com/submit', { 
         email,
         content,
       });
       alert(response.data.message);
     } catch (error) {
-      alert('Failed to submit data123');
+      alert('Failed to submit data');
     }
   };
+
+//  이메일 입력창, 전송 버튼 component
+  function PushEmailData() {
+    return (
+    <div className="mt-8 w-full max-w-md">
+    <input
+      type="email"
+      placeholder="Email"
+      className="w-full py-3 px-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+      value={email}
+      onChange={(e) => setEmail(e.target.value)}
+  
+    />
+    <button className="w-full mt-4 py-3 px-4 bg-green-600 text-white rounded-lg shadow-sm hover:bg-green-700"
+      onClick={handleSubmit}>
+      Send & Receive Answers
+    </button>
+    </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
@@ -34,7 +60,7 @@ function App() {
           Experts and experienced expats will make a solution.
         </p>
       </div>
-
+      {/* 버튼 4개  */}
       <div className="space-y-4 w-full max-w-md">
         <button
           className="w-full py-3 px-4 bg-white border border-gray-300 rounded-lg shadow-sm text-gray-800 text-left hover:bg-gray-100 flex justify-between items-center"
@@ -74,9 +100,10 @@ function App() {
         </button>
       </div>
 
-      {/* 조건부 렌더링 섹션 */}
+      {/* 조건부 렌더링 섹션, 버튼 누를시 조건부 렌더링 */}
       {selectedButton === 1 && (
-        <div className="mt-8 text-left w-full max-w-md">
+        <>
+          <div className="mt-8 text-left w-full max-w-md">
           <textarea
             className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-gray-600 text-sm"
             rows="6"
@@ -88,10 +115,12 @@ function App() {
               value={content}
             onChange={(e) => setContent(e.target.value)}
           ></textarea>
-        </div>
+          </div>
+          <PushEmailData/>
+        </>
       )}
-
       {selectedButton === 2 && (
+        <>
         <div className="mt-8 text-left w-full max-w-md">
           <textarea
             className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-gray-600 text-sm"
@@ -105,8 +134,11 @@ function App() {
             onChange={(e) => setContent(e.target.value)}
           ></textarea>
         </div>
+          <PushEmailData/>
+        </>
       )}
       {selectedButton === 3 && (
+        <>
         <div className="mt-8 text-left w-full max-w-md">
           <textarea
             className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-gray-600 text-sm"
@@ -120,8 +152,11 @@ function App() {
             onChange={(e) => setContent(e.target.value)}  
           ></textarea>
         </div>
+        <PushEmailData/>
+        </>
       )}
       {selectedButton === 4 && (
+        <>
         <div className="mt-8 text-left w-full max-w-md">
           <textarea
             className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-gray-600 text-sm"
@@ -135,29 +170,20 @@ function App() {
             onChange={(e) => setContent(e.target.value)}  
           ></textarea>
         </div>
+        <PushEmailData/>
+        </>
       )}
 
-      <div className="mt-8 w-full max-w-md">
-        <input
-          type="email"
-          placeholder="Email"
-          className="w-full py-3 px-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-
-        />
-        <button className="w-full mt-4 py-3 px-4 bg-green-600 text-white rounded-lg shadow-sm hover:bg-green-700"
-          onClick={handleSubmit}>
-          Send & Receive Answers
-        </button>
-      </div>
+      
 
       <div className="mt-8 w-full max-w-md">
+        {/* Title */}
         <p className="text-green-800 text-lg font-bold mb-4">
-          KiT makes REAL solution for you! <br />
+          KIT makes REAL solution for you! <br />
           More Questions make more service
         </p>
         <div className="space-y-6">
+          {/* Question 1 */}
           <div className="p-4 bg-white border border-gray-300 rounded-lg shadow-sm">
             <p className="text-gray-800 font-medium mb-2">
               <span className="font-bold text-green-600">Q:</span> I don't speak Korean well, so it's really hard to find a part-time job 😭 nearby Seoul university!
@@ -167,6 +193,7 @@ function App() {
               And we sent the result directly to you by email.
             </p>
           </div>
+          {/* Question 2 */}
           <div className="p-4 bg-white border border-gray-300 rounded-lg shadow-sm">
             <p className="text-gray-800 font-medium mb-2">
               <span className="font-bold text-green-600">Q:</span> I am an international student living in Seoul, and I haven't received my <span className="font-bold">Alien Registration Card (ARC)</span> yet. But I need to use my phone SIM card quickly, so I am worried...
